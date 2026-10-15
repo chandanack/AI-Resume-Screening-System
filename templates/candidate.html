@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Candidate Details</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .header,
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 5px;
+            background: #eef2ff;
+            border-radius: 15px;
+        }
+
+        .back {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back a {
+            text-decoration: none;
+        }
+
+        .resume-text {
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <h1>Candidate Details</h1>
+
+            <p>
+                <strong>Resume:</strong>
+                {{ filename }}
+            </p>
+
+        </div>
+
+
+        <!-- SKILLS -->
+
+        <div class="section">
+
+            <h2>Technical Skills</h2>
+
+            {% if skills %}
+
+            {% for skill in skills %}
+
+            <span class="tag">
+                {{ skill }}
+            </span>
+
+            {% endfor %}
+
+            {% else %}
+
+            <p>No skills detected.</p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- EDUCATION -->
+
+        <div class="section">
+
+            <h2>Education</h2>
+
+            {% if education %}
+
+            <ul>
+
+                {% for item in education %}
+
+                <li>
+                    {{ item }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% else %}
+
+            <p>No education information detected.</p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- CERTIFICATIONS -->
+
+        <div class="section">
+
+            <h2>Certifications</h2>
+
+            {% if certifications %}
+
+            <ul>
+
+                {% for certification in certifications %}
+
+                <li>
+                    {{ certification }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% else %}
+
+            <p>No certifications detected.</p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- EXPERIENCE -->
+
+        <div class="section">
+
+            <h2>Experience</h2>
+
+            {% if experience.sections %}
+
+            <p>
+                <strong>Sections detected:</strong>
+            </p>
+
+            <ul>
+
+                {% for section in experience.sections %}
+
+                <li>
+                    {{ section }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% endif %}
+
+
+            {% if experience.date_ranges %}
+
+            <p>
+                <strong>Experience dates:</strong>
+            </p>
+
+            <ul>
+
+                {% for date in experience.date_ranges %}
+
+                <li>
+                    {{ date }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% endif %}
+
+
+            {% if not experience.sections and not experience.date_ranges %}
+
+            <p>
+                No experience information detected.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- KEYWORDS -->
+
+        <div class="section">
+
+            <h2>Extracted Keywords</h2>
+
+            {% if keywords %}
+
+            {% for keyword in keywords[:30] %}
+
+            <span class="tag">
+                {{ keyword }}
+            </span>
+
+            {% endfor %}
+
+            {% else %}
+
+            <p>No keywords detected.</p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ORIGINAL RESUME TEXT -->
+
+        <div class="section">
+
+            <h2>Extracted Resume Text</h2>
+
+            <div class="resume-text">
+                {{ resume_text }}
+            </div>
+
+        </div>
+
+
+        <!-- BACK -->
+
+        <div class="back">
+
+            <a href="/dashboard">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

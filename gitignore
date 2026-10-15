@@ -1,0 +1,13 @@
+
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+instance/
+uploads/
+*.db
+*.sqlite
+.DS_Store

@@ -1,0 +1,5 @@
+Flask
+pdfplumber
+python-docx
+mysql-connector-python
+scikit-learn

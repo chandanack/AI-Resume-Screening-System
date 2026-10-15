@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Resume Analysis</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                radial-gradient(circle at 10% 10%,
+                    rgba(99, 102, 241, 0.14),
+                    transparent 28%),
+                radial-gradient(circle at 90% 20%,
+                    rgba(168, 85, 247, 0.12),
+                    transparent 30%),
+                #070a14;
+
+            color: white;
+
+        }
+
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding: 30px 0 60px;
+
+        }
+
+
+        /* ================================================= */
+        /* HEADER */
+        /* ================================================= */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .brand {
+
+            font-size: 23px;
+
+            font-weight: bold;
+
+        }
+
+
+        .brand span {
+
+            color: #8b5cf6;
+
+        }
+
+
+        .header-buttons {
+
+            display: flex;
+
+            gap: 10px;
+
+        }
+
+
+        .header-btn {
+
+            text-decoration: none;
+
+            color: white;
+
+            background: #111626;
+
+            border: 1px solid #303750;
+
+            padding: 10px 15px;
+
+            border-radius: 9px;
+
+            font-size: 12px;
+
+        }
+
+
+        .header-btn:hover {
+
+            background: #1b2135;
+
+        }
+
+
+        /* ================================================= */
+        /* HERO */
+        /* ================================================= */
+
+        .hero {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .badge {
+
+            display: inline-block;
+
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            background: rgba(99, 102, 241, 0.10);
+
+            border: 1px solid rgba(139, 92, 246, 0.25);
+
+            color: #a78bfa;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 14px;
+
+        }
+
+
+        .hero h1 {
+
+            margin: 0 0 10px;
+
+            font-size: 34px;
+
+        }
+
+
+        .hero p {
+
+            margin: 0;
+
+            color: #747d9c;
+
+            font-size: 13px;
+
+        }
+
+
+        /* ================================================= */
+        /* SCORE HERO */
+        /* ================================================= */
+
+        .score-card {
+
+            background:
+                linear-gradient(135deg,
+                    #17163a,
+                    #201334);
+
+            border: 1px solid #393465;
+
+            border-radius: 22px;
+
+            padding: 30px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.28);
+
+        }
+
+
+        .candidate-file {
+
+            color: #9ba4c2;
+
+            font-size: 13px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .final-score {
+
+            font-size: 64px;
+
+            font-weight: bold;
+
+            background:
+                linear-gradient(90deg,
+                    #818cf8,
+                    #c084fc);
+
+            -webkit-background-clip: text;
+
+            color: transparent;
+
+        }
+
+
+        .score-label {
+
+            color: #747d9c;
+
+            font-size: 11px;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .recommendation {
+
+            display: inline-block;
+
+            padding: 10px 18px;
+
+            border-radius: 25px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+        }
+
+
+        .shortlisted {
+
+            color: #6ee7b7;
+
+            background: rgba(16, 185, 129, 0.10);
+
+            border: 1px solid rgba(16, 185, 129, 0.25);
+
+        }
+
+
+        .not-shortlisted {
+
+            color: #ff8c8c;
+
+            background: rgba(239, 68, 68, 0.10);
+
+            border: 1px solid rgba(239, 68, 68, 0.25);
+
+        }
+
+
+        /* ================================================= */
+        /* SCORE METRICS */
+        /* ================================================= */
+
+        .metrics {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .metric {
+
+            background: #111626;
+
+            border: 1px solid #252c45;
+
+            border-radius: 17px;
+
+            padding: 22px;
+
+        }
+
+
+        .metric-title {
+
+            color: #737c9c;
+
+            font-size: 10px;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .metric-score {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #a78bfa;
+
+        }
+
+
+        .progress {
+
+            height: 8px;
+
+            background: #242a40;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            margin-top: 13px;
+
+        }
+
+
+        .progress-fill {
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(90deg,
+                    #6366f1,
+                    #a855f7);
+
+        }
+
+
+        /* ================================================= */
+        /* EXPLAINABLE AI */
+        /* ================================================= */
+
+        .explain-card {
+
+            background:
+                linear-gradient(145deg,
+                    #111626,
+                    #151329);
+
+            border: 1px solid #30345a;
+
+            border-radius: 22px;
+
+            padding: 28px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .explain-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            margin-bottom: 24px;
+
+        }
+
+
+        .explain-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 23px;
+
+            background:
+                linear-gradient(135deg,
+                    #27245b,
+                    #3b1f5d);
+
+        }
+
+
+        .explain-header h2 {
+
+            margin: 0 0 5px;
+
+            font-size: 20px;
+
+        }
+
+
+        .explain-header p {
+
+            margin: 0;
+
+            color: #747d9c;
+
+            font-size: 12px;
+
+        }
+
+
+        .reason-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 14px;
+
+        }
+
+
+        .reason {
+
+            padding: 17px;
+
+            border-radius: 14px;
+
+            background: rgba(255, 255, 255, 0.025);
+
+            border: 1px solid #292f49;
+
+        }
+
+
+        .reason-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .reason p {
+
+            margin: 0;
+
+            color: #858da9;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+
+        }
+
+
+        .positive {
+
+            color: #6ee7b7;
+
+        }
+
+
+        .warning {
+
+            color: #fbbf24;
+
+        }
+
+
+        .info {
+
+            color: #a78bfa;
+
+        }
+
+
+        /* ================================================= */
+        /* SKILLS */
+        /* ================================================= */
+
+        .skills-section {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .skill-card {
+
+            background: #111626;
+
+            border: 1px solid #252c45;
+
+            border-radius: 20px;
+
+            padding: 24px;
+
+        }
+
+
+        .skill-card h2 {
+
+            margin: 0 0 17px;
+
+            font-size: 18px;
+
+        }
+
+
+        .skill-list {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+        }
+
+
+        .skill {
+
+            padding: 7px 10px;
+
+            border-radius: 7px;
+
+            font-size: 11px;
+
+        }
+
+
+        .matched {
+
+            color: #6ee7b7;
+
+            background: rgba(16, 185, 129, 0.09);
+
+            border: 1px solid rgba(16, 185, 129, 0.22);
+
+        }
+
+
+        .missing {
+
+            color: #ffb4b4;
+
+            background: rgba(239, 68, 68, 0.08);
+
+            border: 1px solid rgba(239, 68, 68, 0.20);
+
+        }
+
+
+        .no-data {
+
+            color: #666f8c;
+
+            font-size: 12px;
+
+        }
+
+
+        /* ================================================= */
+        /* PROFILE */
+        /* ================================================= */
+
+        .profile-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .profile-card {
+
+            background: #111626;
+
+            border: 1px solid #252c45;
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+        }
+
+
+        .profile-card h2 {
+
+            margin: 0 0 15px;
+
+            font-size: 16px;
+
+        }
+
+
+        .profile-card p {
+
+            color: #858da9;
+
+            font-size: 11px;
+
+            line-height: 1.7;
+
+        }
+
+
+        .profile-item {
+
+            padding: 8px 0;
+
+            border-bottom: 1px solid #20263a;
+
+            color: #aeb5ce;
+
+            font-size: 11px;
+
+        }
+
+
+        .profile-item:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        /* ================================================= */
+        /* SKILL GAP */
+        /* ================================================= */
+
+        .gap-card {
+
+            background:
+                rgba(99, 102, 241, 0.06);
+
+            border: 1px solid rgba(99, 102, 241, 0.20);
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .gap-card h2 {
+
+            margin: 0 0 10px;
+
+            font-size: 17px;
+
+        }
+
+
+        .gap-card p {
+
+            margin: 0;
+
+            color: #858da9;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* ================================================= */
+        /* RESUME TEXT */
+        /* ================================================= */
+
+        .resume-card {
+
+            background: #111626;
+
+            border: 1px solid #252c45;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .resume-card h2 {
+
+            margin: 0 0 15px;
+
+            font-size: 18px;
+
+        }
+
+
+        .resume-text {
+
+            max-height: 450px;
+
+            overflow-y: auto;
+
+            background: #090d19;
+
+            border: 1px solid #20263a;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            color: #858da9;
+
+            font-size: 11px;
+
+            line-height: 1.7;
+
+            white-space: pre-wrap;
+
+        }
+
+
+        /* ================================================= */
+        /* ACTIONS */
+        /* ================================================= */
+
+        .actions {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            margin-top: 25px;
+
+        }
+
+
+        .action-btn {
+
+            text-decoration: none;
+
+            color: white;
+
+            padding: 12px 18px;
+
+            border-radius: 9px;
+
+            font-size: 12px;
+
+            border: 1px solid #303750;
+
+            background: #111626;
+
+        }
+
+
+        .primary-action {
+
+            border: none;
+
+            background:
+                linear-gradient(90deg,
+                    #6366f1,
+                    #a855f7);
+
+        }
+
+
+        @media (max-width: 850px) {
+
+            .metrics,
+            .skills-section {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .profile-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+            .reason-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .header {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 15px;
+
+            }
+
+            .header-buttons {
+
+                width: 100%;
+
+            }
+
+            .final-score {
+
+                font-size: 50px;
+
+            }
+
+            .profile-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .actions {
+
+                flex-direction: column;
+
+            }
+
+            .action-btn {
+
+                text-align: center;
+
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <div class="header">
+
+
+            <div class="brand">
+
+                AI<span>Resume</span>
+
+            </div>
+
+
+            <div class="header-buttons">
+
+
+                <a href="/" class="header-btn">
+                    ← New Screening
+                </a>
+
+
+                <a href="/dashboard" class="header-btn">
+                    Dashboard →
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- HERO -->
+        <!-- ================================================= -->
+
+        <div class="hero">
+
+
+            <div class="badge">
+
+                🤖 AI RESUME ANALYSIS COMPLETE
+
+            </div>
+
+
+            <h1>
+
+                Candidate Analysis
+
+            </h1>
+
+
+            <p>
+
+                AI-powered evaluation of resume suitability
+                against the provided job requirements.
+
+            </p>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- FINAL SCORE -->
+        <!-- ================================================= -->
+
+        <div class="score-card">
+
+
+            <div class="candidate-file">
+
+                📄 {{ filename }}
+
+            </div>
+
+
+            <div class="final-score">
+
+                {{ final_score }}%
+
+            </div>
+
+
+            <div class="score-label">
+
+                OVERALL AI SUITABILITY SCORE
+
+            </div>
+
+
+            {% if recommendation == "Shortlisted" %}
+
+
+            <div class="recommendation shortlisted">
+
+                ✓ SHORTLISTED
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="recommendation not-shortlisted">
+
+                ✕ NOT SHORTLISTED
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- SCORE METRICS -->
+        <!-- ================================================= -->
+
+        <div class="metrics">
+
+
+            <div class="metric">
+
+
+                <div class="metric-title">
+
+                    SKILL MATCH
+
+                </div>
+
+
+                <div class="metric-score">
+
+                    {{ match_percentage }}%
+
+                </div>
+
+
+                <div class="progress">
+
+                    <div class="progress-fill" style="width: {{ match_percentage }}%;"></div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="metric">
+
+
+                <div class="metric-title">
+
+                    RESUME / JOB SIMILARITY
+
+                </div>
+
+
+                <div class="metric-score">
+
+                    {{ similarity_score }}%
+
+                </div>
+
+
+                <div class="progress">
+
+                    <div class="progress-fill" style="width: {{ similarity_score }}%;"></div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- EXPLAINABLE AI -->
+        <!-- ================================================= -->
+
+        <div class="explain-card">
+
+
+            <div class="explain-header">
+
+
+                <div class="explain-icon">
+
+                    🧠
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+
+                        Why did the AI make this decision?
+
+                    </h2>
+
+
+                    <p>
+
+                        The recommendation is based on multiple
+                        resume and job-description factors.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="reason-grid">
+
+
+                <!-- SKILL REASON -->
+
+                <div class="reason">
+
+
+                    <div class="reason-title positive">
+
+                        {% if matched_skills %}
+
+                        ✓
+
+                        {% else %}
+
+                        ⚠
+
+                        {% endif %}
+
+                        Skill Matching
+
+                    </div>
+
+
+                    <p>
+
+                        The candidate matched
+
+                        <strong>
+                            {{ matched_skills|length }}
+                        </strong>
+
+                        detected job-related skill(s).
+
+                        {% if matched_skills %}
+
+                        Stronger skill overlap contributes
+                        positively to the final score.
+
+                        {% else %}
+
+                        No matching technical skills were detected.
+
+                        {% endif %}
+
+                    </p>
+
+
+                </div>
+
+
+                <!-- SIMILARITY -->
+
+                <div class="reason">
+
+
+                    <div class="reason-title info">
+
+                        🧠 Resume Similarity
+
+                    </div>
+
+
+                    <p>
+
+                        The resume achieved a
+
+                        <strong>
+                            {{ similarity_score }}%
+                        </strong>
+
+                        similarity score against the
+                        supplied job description.
+
+                        This measures how closely the
+                        resume content aligns with the role.
+
+                    </p>
+
+
+                </div>
+
+
+                <!-- FINAL SCORE -->
+
+                <div class="reason">
+
+
+                    <div class="reason-title positive">
+
+                        🎯 Overall Suitability
+
+                    </div>
+
+
+                    <p>
+
+                        The combined AI score is
+
+                        <strong>
+                            {{ final_score }}%
+                        </strong>.
+
+                        This score combines skill matching
+                        and resume-to-job similarity.
+
+                    </p>
+
+
+                </div>
+
+
+                <!-- MISSING SKILLS -->
+
+                <div class="reason">
+
+
+                    <div class="reason-title warning">
+
+                        {% if missing_skills %}
+
+                        ⚠
+
+                        {% else %}
+
+                        ✓
+
+                        {% endif %}
+
+                        Skill Gap
+
+                    </div>
+
+
+                    <p>
+
+                        {% if missing_skills %}
+
+                        The candidate is missing
+
+                        <strong>
+                            {{ missing_skills|length }}
+                        </strong>
+
+                        detected job-related skill(s).
+
+                        {% else %}
+
+                        No detected job-related skills
+                        are currently missing.
+
+                        {% endif %}
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- SKILL ANALYSIS -->
+        <!-- ================================================= -->
+
+        <div class="skills-section">
+
+
+            <!-- MATCHED -->
+
+            <div class="skill-card">
+
+
+                <h2>
+
+                    ✅ Matched Skills
+
+                </h2>
+
+
+                <div class="skill-list">
+
+
+                    {% if matched_skills %}
+
+
+                    {% for skill in matched_skills %}
+
+                    <span class="skill matched">
+
+                        {{ skill }}
+
+                    </span>
+
+                    {% endfor %}
+
+
+                    {% else %}
+
+
+                    <span class="no-data">
+
+                        No matching skills detected.
+
+                    </span>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- MISSING -->
+
+            <div class="skill-card">
+
+
+                <h2>
+
+                    ⚠️ Missing Skills
+
+                </h2>
+
+
+                <div class="skill-list">
+
+
+                    {% if missing_skills %}
+
+
+                    {% for skill in missing_skills %}
+
+                    <span class="skill missing">
+
+                        {{ skill }}
+
+                    </span>
+
+                    {% endfor %}
+
+
+                    {% else %}
+
+
+                    <span class="no-data">
+
+                        No major missing skills detected.
+
+                    </span>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- SKILL GAP -->
+        <!-- ================================================= -->
+
+        <div class="gap-card">
+
+
+            <h2>
+
+                💡 AI Skill Gap Analysis
+
+            </h2>
+
+
+            <p>
+
+                {{ skill_gap_message }}
+
+            </p>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- EXTRACTED PROFILE -->
+        <!-- ================================================= -->
+
+        <div class="profile-grid">
+
+
+            <!-- EDUCATION -->
+
+            <div class="profile-card">
+
+
+                <h2>
+
+                    🎓 Education
+
+                </h2>
+
+
+                {% if education %}
+
+
+                {% for item in education %}
+
+                <div class="profile-item">
+
+                    {{ item }}
+
+                </div>
+
+                {% endfor %}
+
+
+                {% else %}
+
+
+                <p>
+                    No education information detected.
+                </p>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- CERTIFICATIONS -->
+
+            <div class="profile-card">
+
+
+                <h2>
+
+                    🏅 Certifications
+
+                </h2>
+
+
+                {% if certifications %}
+
+
+                {% for item in certifications %}
+
+                <div class="profile-item">
+
+                    {{ item }}
+
+                </div>
+
+                {% endfor %}
+
+
+                {% else %}
+
+
+                <p>
+                    No certifications detected.
+                </p>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- EXPERIENCE -->
+
+            <div class="profile-card">
+
+
+                <h2>
+
+                    💼 Experience
+
+                </h2>
+
+
+                {% if experience.sections %}
+
+
+                {% for item in experience.sections %}
+
+                <div class="profile-item">
+
+                    {{ item }}
+
+                </div>
+
+                {% endfor %}
+
+
+                {% else %}
+
+
+                <p>
+                    No detailed experience section detected.
+                </p>
+
+
+                {% endif %}
+
+
+                {% if experience.date_ranges %}
+
+
+                {% for item in experience.date_ranges %}
+
+                <div class="profile-item">
+
+                    {{ item }}
+
+                </div>
+
+                {% endfor %}
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- KEYWORDS -->
+        <!-- ================================================= -->
+
+        <div class="profile-card" style="margin-bottom:25px;">
+
+
+            <h2>
+
+                🔑 Extracted Keywords
+
+            </h2>
+
+
+            <div class="skill-list">
+
+
+                {% if keywords %}
+
+
+                {% for keyword in keywords[:50] %}
+
+                <span class="skill matched">
+
+                    {{ keyword }}
+
+                </span>
+
+                {% endfor %}
+
+
+                {% else %}
+
+
+                <span class="no-data">
+
+                    No keywords detected.
+
+                </span>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- RESUME TEXT -->
+        <!-- ================================================= -->
+
+        <div class="resume-card">
+
+
+            <h2>
+
+                📄 Extracted Resume Text
+
+            </h2>
+
+
+            <div class="resume-text">
+
+                {{ resume_text }}
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ACTIONS -->
+        <!-- ================================================= -->
+
+        <div class="actions">
+
+
+            <a href="/candidate/{{ candidate_id }}/report" class="action-btn primary-action">
+
+                📥 Download AI Report
+
+            </a>
+
+
+            <a href="/dashboard" class="action-btn">
+
+                📊 View Dashboard
+
+            </a>
+
+
+            <a href="/" class="action-btn">
+
+                🔄 Analyze Another Resume
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
